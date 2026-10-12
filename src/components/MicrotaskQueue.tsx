@@ -5,11 +5,18 @@ import type { QueueItem } from '../types/simulation';
 
 interface MicrotaskQueueProps {
   queue: QueueItem[];
+  isActive?: boolean;
 }
 
-export const MicrotaskQueue: React.FC<MicrotaskQueueProps> = ({ queue }) => {
+export const MicrotaskQueue: React.FC<MicrotaskQueueProps> = ({ queue, isActive }) => {
   return (
-    <div className="flex flex-col h-full bg-slate-900 rounded-xl border border-emerald-900/40 shadow-md overflow-hidden">
+    <div
+      className={`flex flex-col h-full bg-slate-900 rounded-xl border transition-all duration-300 overflow-hidden ${
+        isActive
+          ? 'border-emerald-500 ring-2 ring-emerald-500/40 shadow-lg shadow-emerald-500/20'
+          : 'border-emerald-900/40 shadow-md'
+      }`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-1.5 bg-emerald-950/40 border-b border-emerald-900/40 flex-shrink-0">
         <div className="flex items-center gap-1.5">
@@ -19,8 +26,11 @@ export const MicrotaskQueue: React.FC<MicrotaskQueueProps> = ({ queue }) => {
           <span className="text-xs font-bold text-emerald-200 tracking-wide">
             Microtask Queue
           </span>
-          <span className="text-[9px] uppercase font-semibold text-emerald-400 bg-emerald-900/50 px-1 py-0.2 rounded border border-emerald-700/50">
-            Yuqori Ustuvorlik
+          <span
+            title="Promise.then, catch, finally, await va queueMicrotask navbati. Har doim Macrotasklardan oldin to‘liq tugatiladi!"
+            className="text-[9px] uppercase font-semibold text-emerald-400 bg-emerald-900/50 px-1 py-0.2 rounded border border-emerald-700/50 cursor-help"
+          >
+            VIP • Oliy Navbat
           </span>
         </div>
 

@@ -191,6 +191,7 @@ export function App() {
                 onRun={() => handleRunSimulation(code)}
                 parseError={simulation.error}
                 isSimulating={isPlaying}
+                expectedOutput={!isCodeModified ? selectedPreset?.expectedOutput : undefined}
               />
             </div>
 
@@ -206,22 +207,59 @@ export function App() {
           <div className="col-span-12 lg:col-span-7 grid grid-cols-2 grid-rows-2 gap-2 min-h-0 h-full">
             {/* 1. Call Stack (Blue) */}
             <div className="h-full min-h-0 overflow-hidden">
-              <CallStack stack={currentStep?.callStack || []} />
+              <CallStack
+                stack={currentStep?.callStack || []}
+                isActive={
+                  currentStep
+                    ? currentStep.callStack.length > 0 &&
+                      (currentStep.phase === 'SYNC_EXECUTION' ||
+                        currentStep.phase === 'EXECUTE_MICROTASK' ||
+                        currentStep.phase === 'EXECUTE_MACROTASK' ||
+                        currentStep.actionBadge?.type === 'stack')
+                    : false
+                }
+              />
             </div>
 
             {/* 2. Web APIs (Purple) */}
             <div className="h-full min-h-0 overflow-hidden">
-              <WebApis items={currentStep?.webApis || []} />
+              <WebApis
+                items={currentStep?.webApis || []}
+                isActive={
+                  currentStep
+                    ? currentStep.actionBadge?.type === 'webapi' ||
+                      currentStep.webApis.some((w) => w.status === 'running')
+                    : false
+                }
+              />
             </div>
 
             {/* 3. Microtask Queue (Green) */}
             <div className="h-full min-h-0 overflow-hidden">
-              <MicrotaskQueue queue={currentStep?.microtaskQueue || []} />
+              <MicrotaskQueue
+                queue={currentStep?.microtaskQueue || []}
+                isActive={
+                  currentStep
+                    ? currentStep.phase === 'CHECK_MICROTASKS' ||
+                      currentStep.phase === 'EXECUTE_MICROTASK' ||
+                      currentStep.actionBadge?.type === 'microtask'
+                    : false
+                }
+              />
             </div>
 
             {/* 4. Macrotask Queue (Amber / Orange) */}
             <div className="h-full min-h-0 overflow-hidden">
-              <MacrotaskQueue queue={currentStep?.macrotaskQueue || []} />
+              <MacrotaskQueue
+                queue={currentStep?.macrotaskQueue || []}
+                isActive={
+                  currentStep
+                    ? currentStep.phase === 'CHECK_MACROTASKS' ||
+                      currentStep.phase === 'EXECUTE_MACROTASK' ||
+                      currentStep.actionBadge?.type === 'macrotask'
+                    : false
+                }
+              />
             </div>
           </div>
         </div>

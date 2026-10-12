@@ -43,6 +43,7 @@ export function simulateJavaScript(code: string): SimulationResult {
   let macrotaskQueue: InternalQueueTask[] = [];
   let consoleLogs: ConsoleLogItem[] = [];
   let stepCounter = 0;
+  let currentExecutionContext: 'sync' | 'microtask' | 'macrotask' = 'sync';
 
   // Environment storage for variables and functions
   const scope: Record<string, any> = {};
@@ -63,6 +64,25 @@ export function simulateJavaScript(code: string): SimulationResult {
     return consoleLogs.map((c) => ({ ...c }));
   }
 
+  function getBeginnerTip(phase: EventLoopPhase): string {
+    switch (phase) {
+      case 'SYNC_EXECUTION':
+        return 'Sinxron kod har doim Call Stack’da darhol bajariladi. Bu vaqtda asinxron timer yoki Promiselar kutib turadi.';
+      case 'CHECK_STACK':
+        return 'Call Stack to‘liq bo‘shadi! Event Loop qoidasi: stack bo‘shashi bilan birinchi bo‘lib Microtasklar tekshiriladi.';
+      case 'CHECK_MICROTASKS':
+      case 'EXECUTE_MICROTASK':
+        return 'Microtasklar (Promise, await, queueMicrotask) oliy ustuvorlikka ega. Barcha microtasklar tugamaguncha bitta ham timer ishlamaydi!';
+      case 'CHECK_MACROTASKS':
+      case 'EXECUTE_MACROTASK':
+        return 'Timer callbacklari Macrotask hisoblanadi. Event Loop har aylanmada ulardan faqat 1 tasini oladi va yana Microtasklarni tekshiradi!';
+      case 'COMPLETED':
+        return 'Barcha sinxron va asinxron amallar muvaffaqiyatli yakunlandi. Dastur to‘xtadi.';
+      default:
+        return 'Event Loop navbatlarni tekshirishda davom etmoqda.';
+    }
+  }
+
   function recordStep(params: {
     activeLine: number | null;
     phase: EventLoopPhase;
@@ -74,6 +94,7 @@ export function simulateJavaScript(code: string): SimulationResult {
     queueReason?: string;
     eventLoopDecision?: string;
     nextStepPreview?: string;
+    beginnerTip?: string;
     actionBadge?: {
       type: 'stack' | 'webapi' | 'microtask' | 'macrotask' | 'loop' | 'console';
       text: string;
@@ -95,6 +116,7 @@ export function simulateJavaScript(code: string): SimulationResult {
           ? "Call Stack band bo‘lgani sababli Event Loop kutish holatida."
           : "Event Loop navbatdagi vazifani qidirmoqda."),
       nextStepPreview: params.nextStepPreview || 'Keyingi qator yoki vazifa tekshiriladi.',
+      beginnerTip: params.beginnerTip || getBeginnerTip(params.phase),
     };
 
     steps.push({
@@ -315,6 +337,7 @@ export function simulateJavaScript(code: string): SimulationResult {
         type: method as any,
         line,
         stepIndex: stepCounter + 1,
+        originType: currentExecutionContext,
       });
 
       recordStep({
@@ -980,6 +1003,7 @@ export function simulateJavaScript(code: string): SimulationResult {
   while ((microtaskQueue.length > 0 || macrotaskQueue.length > 0) && maxIterations-- > 0) {
     // 1. Drain all microtasks first!
     while (microtaskQueue.length > 0 && maxIterations-- > 0) {
+      currentExecutionContext = 'microtask';
       const currentTask = microtaskQueue.shift()!;
       currentTask.item.status = 'moving';
 
@@ -1018,6 +1042,7 @@ export function simulateJavaScript(code: string): SimulationResult {
 
     // Now Microtask Queue is completely empty
     if (macrotaskQueue.length > 0) {
+      currentExecutionContext = 'macrotask';
       // Sort or pick the earliest macrotask (FIFO)
       const currentMacro = macrotaskQueue.shift()!;
       currentMacro.item.status = 'moving';

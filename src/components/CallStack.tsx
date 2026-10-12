@@ -5,11 +5,18 @@ import type { CallStackItem } from '../types/simulation';
 
 interface CallStackProps {
   stack: CallStackItem[];
+  isActive?: boolean;
 }
 
-export const CallStack: React.FC<CallStackProps> = ({ stack }) => {
+export const CallStack: React.FC<CallStackProps> = ({ stack, isActive }) => {
   return (
-    <div className="flex flex-col h-full bg-slate-900 rounded-xl border border-blue-900/40 shadow-md overflow-hidden">
+    <div
+      className={`flex flex-col h-full bg-slate-900 rounded-xl border transition-all duration-300 overflow-hidden ${
+        isActive
+          ? 'border-blue-500 ring-2 ring-blue-500/40 shadow-lg shadow-blue-500/20'
+          : 'border-blue-900/40 shadow-md'
+      }`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-1.5 bg-blue-950/40 border-b border-blue-900/40 flex-shrink-0">
         <div className="flex items-center gap-1.5">
@@ -17,8 +24,11 @@ export const CallStack: React.FC<CallStackProps> = ({ stack }) => {
             <Layers className="w-3.5 h-3.5" />
           </div>
           <span className="text-xs font-bold text-blue-200 tracking-wide">Call Stack</span>
-          <span className="text-[9px] uppercase font-semibold text-blue-400 bg-blue-900/50 px-1 py-0.2 rounded border border-blue-700/50">
-            LIFO
+          <span
+            title="LIFO: Last In First Out — eng oxirgi kirgan funksiya eng birinchi chiqadi"
+            className="text-[9px] uppercase font-semibold text-blue-400 bg-blue-900/50 px-1 py-0.2 rounded border border-blue-700/50 cursor-help"
+          >
+            LIFO (Stack)
           </span>
         </div>
 

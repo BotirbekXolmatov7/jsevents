@@ -5,11 +5,18 @@ import type { QueueItem } from '../types/simulation';
 
 interface MacrotaskQueueProps {
   queue: QueueItem[];
+  isActive?: boolean;
 }
 
-export const MacrotaskQueue: React.FC<MacrotaskQueueProps> = ({ queue }) => {
+export const MacrotaskQueue: React.FC<MacrotaskQueueProps> = ({ queue, isActive }) => {
   return (
-    <div className="flex flex-col h-full bg-slate-900 rounded-xl border border-amber-900/40 shadow-md overflow-hidden">
+    <div
+      className={`flex flex-col h-full bg-slate-900 rounded-xl border transition-all duration-300 overflow-hidden ${
+        isActive
+          ? 'border-amber-500 ring-2 ring-amber-500/40 shadow-lg shadow-amber-500/20'
+          : 'border-amber-900/40 shadow-md'
+      }`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-1.5 bg-amber-950/40 border-b border-amber-900/40 flex-shrink-0">
         <div className="flex items-center gap-1.5">
@@ -19,8 +26,11 @@ export const MacrotaskQueue: React.FC<MacrotaskQueueProps> = ({ queue }) => {
           <span className="text-xs font-bold text-amber-200 tracking-wide">
             Macrotask Queue
           </span>
-          <span className="text-[9px] uppercase font-semibold text-amber-400 bg-amber-900/50 px-1 py-0.2 rounded border border-amber-700/50">
-            1 ta ijro
+          <span
+            title="setTimeout va setInterval callbacklari navbati. Har bir aylanmada faqat bitta macrotask olinadi va yana Microtasklar tekshiriladi!"
+            className="text-[9px] uppercase font-semibold text-amber-400 bg-amber-900/50 px-1 py-0.2 rounded border border-amber-700/50 cursor-help"
+          >
+            Har Tsiklda 1 ta
           </span>
         </div>
 

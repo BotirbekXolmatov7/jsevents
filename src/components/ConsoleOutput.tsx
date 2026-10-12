@@ -65,13 +65,30 @@ export const ConsoleOutput: React.FC<ConsoleOutputProps> = ({ logs, onClear }) =
                 }`}
               >
                 <span className="text-slate-500 select-none font-bold">&gt;</span>
-                <span className="flex-1 whitespace-pre-wrap break-all font-mono">
+                <span className="flex-1 whitespace-pre-wrap break-all font-mono font-medium">
                   {log.value}
                 </span>
 
+                {/* Origin Source Badge for Learners */}
+                {log.originType === 'sync' && (
+                  <span className="text-[9px] font-medium px-1.5 py-0.2 rounded bg-blue-950/80 text-blue-300 border border-blue-800/60 font-sans flex-shrink-0">
+                    Sinxron
+                  </span>
+                )}
+                {log.originType === 'microtask' && (
+                  <span className="text-[9px] font-medium px-1.5 py-0.2 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 font-sans flex-shrink-0">
+                    Microtask
+                  </span>
+                )}
+                {log.originType === 'macrotask' && (
+                  <span className="text-[9px] font-medium px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-800/60 font-sans flex-shrink-0">
+                    Macrotask
+                  </span>
+                )}
+
                 {log.line !== null && (
-                  <span className="text-[9px] text-slate-500 select-none font-sans whitespace-nowrap ml-1">
-                    qator {log.line}
+                  <span className="text-[9px] text-slate-500 select-none font-sans whitespace-nowrap ml-1 flex-shrink-0">
+                    Q{log.line}
                   </span>
                 )}
               </div>

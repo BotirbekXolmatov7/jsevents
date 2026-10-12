@@ -62,6 +62,18 @@ export const StepExplanationCard: React.FC<StepExplanationCardProps> = ({
         )}
       </div>
 
+      {/* Beginner Tip / Golden Rule */}
+      {explanation.beginnerTip && (
+        <div className="bg-blue-950/30 border border-blue-800/40 rounded-lg px-2 py-0.5 flex items-center gap-1.5 text-[10px] text-slate-300">
+          <span className="text-amber-400 font-bold flex items-center gap-0.5 flex-shrink-0">
+            💡 Qoida:
+          </span>
+          <span className="truncate text-slate-300 font-medium">
+            {explanation.beginnerTip}
+          </span>
+        </div>
+      )}
+
       {/* 4 Core Educational Explanations Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-[11px]">
         {/* 1. Hozir nima sodir bo'ldi? */}

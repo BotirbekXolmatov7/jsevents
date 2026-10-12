@@ -42,6 +42,7 @@ export interface ConsoleLogItem {
   type: 'log' | 'info' | 'warn' | 'error';
   line: number | null;
   stepIndex: number;
+  originType?: 'sync' | 'microtask' | 'macrotask';
 }
 
 export interface StepExplanation {
@@ -51,6 +52,7 @@ export interface StepExplanation {
   queueReason: string;
   eventLoopDecision: string;
   nextStepPreview: string;
+  beginnerTip?: string;
 }
 
 export interface SimulationStep {
@@ -79,4 +81,5 @@ export interface PresetCode {
   difficulty: 'Oson' | 'O‘rta' | 'Qiyin';
   category: string;
   code: string;
+  expectedOutput?: string[];
 }

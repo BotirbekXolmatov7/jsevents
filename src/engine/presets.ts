@@ -6,7 +6,8 @@ export const PRESETS: PresetCode[] = [
     title: '1. Oddiy Sinxron Kod',
     category: 'Asoslar',
     difficulty: 'Oson',
-    description: 'Sinxron kod to‘g‘ridan-to‘g‘ri Call Stack’da LIFO (Last In First Out) tartibida bajariladi va Event Loop navbatlariga tushmaydi.',
+    description: 'Sinxron kod to‘g‘ridan-to‘g‘ri Call Stack’da LIFO tartibida bajariladi va Event Loop navbatlariga tushmaydi.',
+    expectedOutput: ['Start', 'Salom, JavaScript', 'Jarayon davom etmoqda', 'End'],
     code: `console.log("Start");
 
 function greet(name) {
@@ -27,6 +28,7 @@ console.log("End");`,
     category: 'Timerlar',
     difficulty: 'Oson',
     description: 'setTimeout chaqirilganda Web APIs timer hisoblaydi, vaqt tugagach uning callbacki Macrotask Queue’ga joylashadi.',
+    expectedOutput: ['1: Boshlanishi', '4: Tugashi', '2: 0ms timer callback', '3: 100ms timer callback'],
     code: `console.log("1: Boshlanishi");
 
 setTimeout(() => {
@@ -45,6 +47,7 @@ console.log("4: Tugashi");`,
     category: 'Asinxron',
     difficulty: 'O‘rta',
     description: 'Promise executor funksiyasi sinxron ishlaydi, ammo .then() callbacki Microtask Queue’ga tushadi va sinxron kod tugashi bilanoq bajariladi.',
+    expectedOutput: ['1: Boshlanish', '4: Tugash', '2: Promise microtask 1', '3: Promise microtask 2 (zanjir)'],
     code: `console.log("1: Boshlanish");
 
 Promise.resolve().then(() => {
@@ -61,6 +64,7 @@ console.log("4: Tugash");`,
     category: 'Asinxron',
     difficulty: 'O‘rta',
     description: 'await ifodasi kelgan zahoti async funksiya to‘xtatiladi, kutishdan keyingi qism Microtask sifatida navbatga qo‘yiladi.',
+    expectedOutput: ['1: Script start', '2: Async funksiya ichi (sinxron)', '4: Script end', '3: Await’dan keyingi qism (microtask)'],
     code: `console.log("1: Script start");
 
 async function fetchData() {
@@ -78,6 +82,7 @@ console.log("4: Script end");`,
     category: 'Kombinatsiya',
     difficulty: 'O‘rta',
     description: 'Microtask Queue har doim Macrotask Queue’dan ustun turadi! Stack bo‘shagach, avval barcha Microtasklar tugatiladi, so‘ngra 1 ta Macrotask olinadi.',
+    expectedOutput: ['1: Sinxron boshlanish', '4: Sinxron yakun', '3: Promise.then (microtask)', '2: setTimeout (macrotask)'],
     code: `console.log("1: Sinxron boshlanish");
 
 setTimeout(() => {
@@ -96,6 +101,7 @@ console.log("4: Sinxron yakun");`,
     category: 'Murakkab',
     difficulty: 'Qiyin',
     description: 'Macrotask ichida yangi Promise yaratilsa, u darhol o‘sha macrotask tugashi bilan navbatdagi macrotaskdan OLDIN bajariladi!',
+    expectedOutput: ['Start', 'End', 'Initial Microtask', 'Timeout 1', 'Nested Microtask (Timeout 1 ichida)', 'Timeout 2'],
     code: `console.log("Start");
 
 setTimeout(() => {
@@ -121,6 +127,7 @@ console.log("End");`,
     category: 'Microtasklar',
     difficulty: 'O‘rta',
     description: 'queueMicrotask() to‘g‘ridan-to‘g‘ri Microtask Queue’ga vazifa qo‘shadi va Promise zanjiri bilan bir xil navbatda turadi.',
+    expectedOutput: ['A', 'E', 'B: queueMicrotask 1', 'D: Promise.then', 'C: Ichma-ich queueMicrotask'],
     code: `console.log("A");
 
 queueMicrotask(() => {

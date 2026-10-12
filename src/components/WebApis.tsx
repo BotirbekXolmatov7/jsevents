@@ -5,11 +5,18 @@ import type { WebApiItem } from '../types/simulation';
 
 interface WebApisProps {
   items: WebApiItem[];
+  isActive?: boolean;
 }
 
-export const WebApis: React.FC<WebApisProps> = ({ items }) => {
+export const WebApis: React.FC<WebApisProps> = ({ items, isActive }) => {
   return (
-    <div className="flex flex-col h-full bg-slate-900 rounded-xl border border-purple-900/40 shadow-md overflow-hidden">
+    <div
+      className={`flex flex-col h-full bg-slate-900 rounded-xl border transition-all duration-300 overflow-hidden ${
+        isActive
+          ? 'border-purple-500 ring-2 ring-purple-500/40 shadow-lg shadow-purple-500/20'
+          : 'border-purple-900/40 shadow-md'
+      }`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-1.5 bg-purple-950/40 border-b border-purple-900/40 flex-shrink-0">
         <div className="flex items-center gap-1.5">
@@ -17,8 +24,11 @@ export const WebApis: React.FC<WebApisProps> = ({ items }) => {
             <Globe className="w-3.5 h-3.5" />
           </div>
           <span className="text-xs font-bold text-purple-200 tracking-wide">Web APIs</span>
-          <span className="text-[9px] uppercase font-semibold text-purple-400 bg-purple-900/50 px-1 py-0.2 rounded border border-purple-700/50">
-            Browser
+          <span
+            title="Browser: setTimeout, interval va tashqi asinxron APIlar fon rejimida shu yerda hisoblanadi"
+            className="text-[9px] uppercase font-semibold text-purple-400 bg-purple-900/50 px-1 py-0.2 rounded border border-purple-700/50 cursor-help"
+          >
+            Fonda (Browser)
           </span>
         </div>
 
